@@ -13,8 +13,11 @@ import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { StringNullableFilter } from "../../util/StringNullableFilter";
 import { Type } from "class-transformer";
-import { IsOptional } from "class-validator";
+import { IsOptional, ValidateNested } from "class-validator";
 import { StringFilter } from "../../util/StringFilter";
+import { BooleanNullableFilter } from "../../util/BooleanNullableFilter";
+import { OrderListRelationFilter } from "../../order/base/OrderListRelationFilter";
+import { ReviewListRelationFilter } from "../../review/base/ReviewListRelationFilter";
 
 @InputType()
 class UserWhereInput {
@@ -42,6 +45,17 @@ class UserWhereInput {
 
   @ApiProperty({
     required: false,
+    type: BooleanNullableFilter,
+  })
+  @Type(() => BooleanNullableFilter)
+  @IsOptional()
+  @Field(() => BooleanNullableFilter, {
+    nullable: true,
+  })
+  isAdmin?: BooleanNullableFilter;
+
+  @ApiProperty({
+    required: false,
     type: StringNullableFilter,
   })
   @Type(() => StringNullableFilter)
@@ -50,6 +64,30 @@ class UserWhereInput {
     nullable: true,
   })
   lastName?: StringNullableFilter;
+
+  @ApiProperty({
+    required: false,
+    type: () => OrderListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => OrderListRelationFilter)
+  @IsOptional()
+  @Field(() => OrderListRelationFilter, {
+    nullable: true,
+  })
+  orders?: OrderListRelationFilter;
+
+  @ApiProperty({
+    required: false,
+    type: () => ReviewListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => ReviewListRelationFilter)
+  @IsOptional()
+  @Field(() => ReviewListRelationFilter, {
+    nullable: true,
+  })
+  reviews?: ReviewListRelationFilter;
 
   @ApiProperty({
     required: false,
